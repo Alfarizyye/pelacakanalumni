@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Data Alumni - Sistem Pelacakan Alumni UMM</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <h3 class="logo">UMM Tracker</h3>
+        <a href="dashboard.html">
+            <i class="fa fa-chart-line"></i> Dashboard
+        </a>
+        <a href="history.html">
+            <i class="fa fa-clock"></i> History
+        </a>
+        <a href="data_alumni.html">
+            <i class="fa fa-database"></i> Data Alumni
+        </a>
+    </div>
+
+    <div class="content">
+        <h2 class="mb-4">
+            <i class="fa fa-database"></i>
+            Data Alumni Tersimpan
+        </h2>
+
+        <div class="card panel-card">
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered" style="min-width: 1800px;">
+                    <thead class="table-danger">
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Lulusan</th>
+                            <th>NIM</th>
+                            <th>Tahun Masuk</th>
+                            <th>Tanggal Lulus</th>
+                            <th>Fakultas</th>
+                            <th>Program Studi</th>
+                            <th>Email</th>
+                            <th>No HP</th>
+                            <th>Sosmed Pribadi</th>
+                            <th>Tempat Kerja</th>
+                            <th>Alamat Kerja</th>
+                            <th>Sosmed Kerja</th>
+                            <th>Posisi</th>
+                            <th>Kategori</th>
+                            <th>Status Pelacakan</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataTableAlumni"></tbody>
+                </table>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <div id="paginationInfo" class="text-muted"></div>
+                <nav>
+                    <ul class="pagination pagination-sm mb-0" id="paginationControls">
+                        <!-- Pagination buttons will be rendered here -->
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cek Login
+        if (localStorage.getItem('isAuthenticated') !== 'true') {
+            window.location.href = 'login.html';
+        }
+
+        let alumni = [];
+        let currentPage = 1;
+        let limit = 100;
+        let paginationData = {};
+
+        async function fetchAlumni(page = 1) {
+            try {
+                currentPage = page;
+                const response = await fetch(`api/get_alumni.php?page=${page}&limit=${limit}`);
+                const result = await response.json();
+                if (result.status === 'success') {
+                    alumni = result.data;
+                    paginationData = result.pagination;
+                    tampilData();
+                    renderPagination();
+                }
+            } catch (e) {
+                console.error("Gagal mengambil data", e);
+            }
+        }
+
+        function tampilData() {
+            let html = "";
+            if (alumni.length === 0) {
+                html = "<tr><td colspan='16' class='text-center'>Belum ada data alumni yang tersimpan. Silakan import dari Dashboard.</td></tr>";
+            } else {
+                let no = (currentPage - 1) * limit + 1;
+                alumni.forEach((a, i) => {
+                    html += `
+                    <tr>
+                        <td>${no++}</td>
+                        <td>${a.nama_lulusan || '-'}</td>
+                        <td>${a.nim || '-'}</td>
+                        <td>${a.tahun_masuk || '-'}</td>
+                        <td>${a.tanggal_lulus || '-'}</td>
+                        <td>${a.fakultas || '-'}</td>
+                        <td>${a.program_studi || '-'}</td>
+                        <td>${a.email || '-'}</td>
+                        <td>${a.nohp || '-'}</td>
+                        <td>
+                            <small>
+                                LI: ${a.linkedin || '-'}<br>
+                                IG: ${a.ig || '-'}<br>
+                                FB: ${a.fb || '-'}<br>
+                                TT: ${a.tiktok || '-'}
+                            </small>
+                        </td>
+                        <td>${a.tempat_kerja || '-'}</td>
+                        <td>${a.alamat_kerja || '-'}</td>
+                        <td>${a.sosmed_kerja || '-'}</td>
+                        <td>${a.posisi || '-'}</td>
+                        <td>${a.jenis_pekerjaan || '-'}</td>
+                        <td>
+                            <span class="badge ${a.status === 'Teridentifikasi' ? 'bg-success' : (a.status === 'Belum Dilacak' ? 'bg-secondary' : 'bg-warning')}">
+                                ${a.status || '-'}
+                            </span>
+                        </td>
+                        <td>
+                            <button onclick="hapusData(${i})" class="btn btn-danger btn-sm">
+                                <i class="fa fa-trash"></i> Hapus
+                            </button>
+                        </td>
+                    </tr>
+                    `;
+                });
+            }
+            document.getElementById("dataTableAlumni").innerHTML = html;
+        }
+        
+        function renderPagination() {
+            const { current_page, total_pages, total_records } = paginationData;
+            document.getElementById("paginationInfo").innerText = `Menampilkan halaman ${current_page} dari ${total_pages} (${total_records} data)`;
+            
+            let html = "";
+            
+            // Previous button
+            html += `<li class="page-item ${current_page <= 1 ? 'disabled' : ''}">
+                        <a class="page-link" href="javascript:void(0)" onclick="fetchAlumni(${current_page - 1})">Sebelumnya</a>
+                    </li>`;
+            
+            // Limit shown pages to avoid overflowing
+            let startPage = Math.max(1, current_page - 2);
+            let endPage = Math.min(total_pages, current_page + 2);
+            
+            if (startPage > 1) {
+                html += `<li class="page-item"><a class="page-link" href="javascript:void(0)" onclick="fetchAlumni(1)">1</a></li>`;
+                if (startPage > 2) html += `<li class="page-item disabled"><a class="page-link">...</a></li>`;
+            }
+            
+            for (let i = startPage; i <= endPage; i++) {
+                html += `<li class="page-item ${i === current_page ? 'active' : ''}">
+                            <a class="page-link" href="javascript:void(0)" onclick="fetchAlumni(${i})">${i}</a>
+                        </li>`;
+            }
+            
+            if (endPage < total_pages) {
+                if (endPage < total_pages - 1) html += `<li class="page-item disabled"><a class="page-link">...</a></li>`;
+                html += `<li class="page-item"><a class="page-link" href="javascript:void(0)" onclick="fetchAlumni(${total_pages})">${total_pages}</a></li>`;
+            }
+            
+            // Next button
+            html += `<li class="page-item ${current_page >= total_pages ? 'disabled' : ''}">
+                        <a class="page-link" href="javascript:void(0)" onclick="fetchAlumni(${current_page + 1})">Selanjutnya</a>
+                    </li>`;
+                    
+            document.getElementById("paginationControls").innerHTML = html;
+        }
+
+        async function hapusData(i) {
+            if (confirm("Apakah Anda yakin ingin menghapus data alumni ini?")) {
+                try {
+                    await fetch('api/delete_alumni.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id: alumni[i].id })
+                    });
+                    await fetchAlumni(currentPage);
+                } catch(e) {
+                    console.error(e);
+                }
+            }
+        }
+
+        fetchAlumni();
+    </script>
+</body>
+
+</html>

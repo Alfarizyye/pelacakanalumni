@@ -27,6 +27,10 @@
             <i class="fa fa-clock"></i> History
         </a>
 
+        <a href="data_alumni.html">
+            <i class="fa fa-database"></i> Data Alumni
+        </a>
+
     </div>
 
 
@@ -39,47 +43,43 @@
 
 
         <!-- STATISTIK -->
-
         <div class="row mb-4">
-
             <div class="col-md-4">
-
-                <div class="card stat-card bg-danger text-white">
-
-                    <h6>Total Alumni</h6>
-
+                <div class="card stat-card bg-primary text-white">
+                    <h6>Total Data Alumni</h6>
                     <h2 id="totalAlumni">0</h2>
-
                 </div>
-
             </div>
-
-
             <div class="col-md-4">
-
                 <div class="card stat-card bg-success text-white">
-
                     <h6>Teridentifikasi</h6>
-
                     <h2 id="foundAlumni">0</h2>
-
                 </div>
-
             </div>
-
-
             <div class="col-md-4">
-
                 <div class="card stat-card bg-secondary text-white">
-
-                    <h6>Belum Ditemukan</h6>
-
+                    <h6>Belum Dilacak</h6>
                     <h2 id="notFound">0</h2>
-
                 </div>
-
             </div>
+        </div>
 
+        <h5 class="mb-3 text-muted"><i class="fa fa-graduation-cap"></i> Penilaian Sistem (Coverage & Accuracy)</h5>
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card stat-card border-start border-4 border-danger">
+                    <h6>Coverage Assessment</h6>
+                    <h2 id="coverageScore" class="text-danger">0%</h2>
+                    <p class="small text-muted mb-0">Rasio penemuan 8 parameter utama</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card stat-card border-start border-4 border-warning">
+                    <h6>Accuracy Assessment</h6>
+                    <h2 id="accuracyScore" class="text-warning">0%</h2>
+                    <p class="small text-muted mb-0">Rata-rata akurasi data ditemukan</p>
+                </div>
+            </div>
         </div>
 
 
@@ -158,76 +158,187 @@
         <div class="card panel-card mb-4">
 
             <h5>
-    <i class="fa fa-search"></i>
-    Pelacakan Alumni
-</h5>
+                <i class="fa fa-search"></i>
+                Pelacakan Alumni
+            </h5>
 
-<input id="searchNama" class="form-control mb-2" placeholder="Nama Lengkap">
-<input id="searchNIM" class="form-control mb-2" placeholder="NIM">
-<input id="searchTahunMasuk" class="form-control mb-2" placeholder="Tahun Masuk">
-<input id="searchTanggalLulus" class="form-control mb-2" placeholder="Tanggal Lulus">
-<input id="searchFakultas" class="form-control mb-2" placeholder="Fakultas">
-<input id="searchProdi" class="form-control mb-2" placeholder="Program Studi">
+            <input id="searchNama" class="form-control mb-2" placeholder="Nama Lulusan">
+            <input id="searchNIM" class="form-control mb-2" placeholder="NIM">
+            <input id="searchTahunMasuk" class="form-control mb-2" placeholder="Tahun Masuk">
+            <input id="searchTanggalLulus" class="form-control mb-2" placeholder="Tanggal Lulus">
+            <input id="searchFakultas" class="form-control mb-2" placeholder="Fakultas">
+            <input id="searchProdi" class="form-control mb-2" placeholder="Program Studi">
 
-<button onclick="lacakAlumni()" class="btn btn-danger w-100">
-    🔍 Lacak Alumni
-</button>
+            <button onclick="lacakAlumni()" class="btn btn-danger w-100">
+                🔍 Lacak Alumni
+            </button>
 
-<!-- IMPORT EXCEL -->
-<input type="file" id="importExcel" accept=".xlsx, .xls, .csv"
-class="d-none"
-onchange="prosesImportExcel(event)">
+            <!-- IMPORT EXCEL -->
+            <input type="file" id="importExcel" accept=".xlsx, .xls, .csv" class="d-none"
+                onchange="prosesImportExcel(event)">
 
-<button onclick="document.getElementById('importExcel').click()"
-class="btn btn-success w-100 mt-2">
-    <i class="fa fa-file-excel"></i> Import Data Alumni (Excel)
-</button>
+            <button onclick="document.getElementById('importExcel').click()" class="btn btn-success w-100 mt-2">
+                <i class="fa fa-file-excel"></i> Import Data Alumni (Excel)
+            </button>
 
-        <!-- TABLE -->
+            <!-- TABLE -->
 
-        <div class="card panel-card">
-            <div class="table-responsive">
-                <table class="table table-hover table-bordered" style="min-width: 1500px;">
+            <div class="card panel-card">
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered" style="min-width: 1800px;">
 
-                    <thead class="table-danger">
+                        <thead class="table-danger">
 
-                        <tr>
+                            <tr>
 
-                            <th>Nama</th>
-                            <th>Prodi</th>
-                            <th>Tahun</th>
-                            <th>Email</th>
-                            <th>No HP</th>
-                            <th>Sosmed Pribadi</th>
-                            <th>Tempat Kerja</th>
-                            <th>Posisi</th>
-                            <th>Kategori</th>
-                            <th>Status</th>
-                            <th>Confidence</th>
-                            <th>Aksi</th>
+                                <th>Nama Lulusan</th>
+                                <th>Program Studi</th>
+                                <th>Tahun Masuk</th>
+                                <th>Tanggal Lulus</th>
+                                <th>Email</th>
+                                <th>No HP</th>
+                                <th>Sosmed Pribadi</th>
+                                <th>Tempat Kerja</th>
+                                <th>Alamat Kerja</th>
+                                <th>Sosmed Kerja</th>
+                                <th>Posisi</th>
+                                <th>Kategori</th>
+                                <th>Status</th>
+                                <th>Confidence</th>
+                                <th>Aksi</th>
 
-                        </tr>
+                            </tr>
 
-                    </thead>
+                        </thead>
 
-                    <tbody id="tableAlumni"></tbody>
+                        <tbody id="tableAlumni"></tbody>
 
-                </table>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- MODAL OSINT SEARCH -->
+        <div class="modal fade" id="osintModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title"><i class="fa fa-search"></i> Smart OSINT Search</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Gunakan link pencarian pintar di bawah ini untuk mencari data asli profil <b id="osintNama"></b> secara cepat di internet:</p>
+                        
+                        <div class="list-group">
+                            <a id="linkGoogle" href="#" target="_blank" class="list-group-item list-group-item-action">
+                                <i class="fab fa-google text-danger"></i> Cari di Google Search
+                            </a>
+                            <a id="linkLinkedIn" href="#" target="_blank" class="list-group-item list-group-item-action">
+                                <i class="fab fa-linkedin text-primary"></i> Cari Profil LinkedIn
+                            </a>
+                            <a id="linkInstagram" href="#" target="_blank" class="list-group-item list-group-item-action">
+                                <i class="fab fa-instagram text-danger"></i> Cari Akun Instagram
+                            </a>
+                            <a id="linkFacebook" href="#" target="_blank" class="list-group-item list-group-item-action">
+                                <i class="fab fa-facebook text-primary"></i> Cari Akun Facebook
+                            </a>
+                        </div>
+                        
+                        <div class="mt-3 alert alert-info small">
+                            <i class="fa fa-info-circle"></i> Setelah Anda menemukan datanya, klik tombol <b>Edit Data</b> pada tabel untuk memperbarui data di sistem.
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-    </div>
+        <!-- MODAL EDIT DATA -->
+        <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-warning">
+                        <h5 class="modal-title"><i class="fa fa-edit"></i> Edit Data Alumni</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="editIndex">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-muted border-bottom pb-2">Kontak & Sosmed Pribadi</h6>
+                                <div class="mb-2">
+                                    <label>Email</label>
+                                    <input type="email" id="editEmail" class="form-control form-control-sm">
+                                </div>
+                                <div class="mb-2">
+                                    <label>No HP / WA</label>
+                                    <input type="text" id="editNoHp" class="form-control form-control-sm">
+                                </div>
+                                <div class="mb-2">
+                                    <label>LinkedIn (URL/Username)</label>
+                                    <input type="text" id="editLinkedIn" class="form-control form-control-sm">
+                                </div>
+                                <div class="mb-2">
+                                    <label>Instagram</label>
+                                    <input type="text" id="editIG" class="form-control form-control-sm">
+                                </div>
+                                <div class="mb-2">
+                                    <label>Facebook</label>
+                                    <input type="text" id="editFB" class="form-control form-control-sm">
+                                </div>
+                                <div class="mb-2">
+                                    <label>TikTok</label>
+                                    <input type="text" id="editTikTok" class="form-control form-control-sm">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-muted border-bottom pb-2">Data Pekerjaan</h6>
+                                <div class="mb-2">
+                                    <label>Tempat Bekerja</label>
+                                    <input type="text" id="editTempatKerja" class="form-control form-control-sm">
+                                </div>
+                                <div class="mb-2">
+                                    <label>Posisi / Jabatan</label>
+                                    <input type="text" id="editPosisi" class="form-control form-control-sm">
+                                </div>
+                                <div class="mb-2">
+                                    <label>Kategori (PNS/Swasta/Wirausaha)</label>
+                                    <select id="editKategori" class="form-select form-select-sm">
+                                        <option value="">Pilih...</option>
+                                        <option value="PNS">PNS</option>
+                                        <option value="Swasta">Swasta</option>
+                                        <option value="BUMN">BUMN</option>
+                                        <option value="Wirausaha">Wirausaha</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Alamat Tempat Kerja</label>
+                                    <textarea id="editAlamatKerja" class="form-control form-control-sm" rows="2"></textarea>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Sosmed Tempat Kerja</label>
+                                    <input type="text" id="editSosmedKerja" class="form-control form-control-sm">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-primary" onclick="simpanEditData()">Simpan Perubahan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
-
-    <script src="js/app.js"></script>
-    <script src="js/queryGenerator.js"></script>
-    <script src="js/trackingEngine.js"></script>
-    <script src="js/scoringEngine.js"></script>
-    <script src="js/scheduler.js"></script>
+        <script src="js/app.js?v=2"></script>
+        <script src="js/queryGenerator.js"></script>
+        <script src="js/trackingEngine.js"></script>
+        <script src="js/scoringEngine.js"></script>
+        <script src="js/scheduler.js"></script>
 
 </body>
 

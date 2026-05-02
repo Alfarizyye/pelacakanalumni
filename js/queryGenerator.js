@@ -2,11 +2,11 @@ function generateQuery(a){
 
 return [
 
-a.name + " Universitas Muhammadiyah Malang",
-a.name + " " + a.prodi + " UMM",
-a.name + " site:scholar.google.com",
-a.name + " ORCID",
-a.name + " LinkedIn"
+a.nama_lulusan + " Universitas Muhammadiyah Malang",
+a.nama_lulusan + " " + a.program_studi + " UMM",
+a.nama_lulusan + " site:scholar.google.com",
+a.nama_lulusan + " ORCID",
+a.nama_lulusan + " LinkedIn"
 
 ]
 
